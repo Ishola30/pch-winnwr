@@ -34,8 +34,15 @@
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
+        background-image: url('pch1.jpg'); /* Assuming pch2.jpg is your background image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the image */
+            background-attachment: fixed; /* Keep background fixed while scrolling */
+            /* You might want a fallback color or a transparent overlay on the image */
+            background-color: #f3f4f6; /* Fallback color */
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #d1d5db;
+            background-image: #d1d5db;
             border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
@@ -466,6 +473,7 @@
 </script>
 </body>
 </html>
+
 
 
 
