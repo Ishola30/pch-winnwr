@@ -1,83 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CND | Secure Banking</title>
-    <style>
-        :root { --primary: #1a1a2e; --secondary: #16213e; --accent: #4ecca3; --text: #eeeeee; }
-        body { font-family: 'Inter', sans-serif; background: #0f0f1a; color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        #loader { position: fixed; inset: 0; background: var(--primary); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; animation: fadeOut 0.5s 9.5s forwards; }
-        .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EliteBank Dashboard</title>
 
-        .container { width: 90%; max-width: 600px; background: var(--secondary); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { color: var(--accent); text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #333; background: #0f0f1a; color: white; border-radius: 8px; box-sizing: border-box; }
-        button { background: var(--accent); color: var(--primary); border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { opacity: 0.9; }
+<style>
 
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
-        
-        #dashboard, #processing { display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-    </style>
+/*====================================================
+        ELITEBANK - DARK FINTECH UI
+====================================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:#fff;
+overflow-x:hidden;
+}
+
+/* Theme Colors */
+
+:root{
+--bg:#0b1220;
+--card:#151f33;
+--card2:#1d2a44;
+--accent:#00d084;
+--blue:#3b82f6;
+--text:#ffffff;
+--gray:#aab4c8;
+}
+
+/*==============================
+        Splash Screen
+===============================*/
+
+#splash{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+background:linear-gradient(145deg,#07101f,#14213d);
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+animation:fadeIn 1s;
+}
+
+.logo{
+width:120px;
+height:120px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--blue));
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:45px;
+font-weight:bold;
+color:white;
+box-shadow:0 0 40px rgba(0,208,132,.5);
+animation:pulse 2s infinite;
+}
+
+.bank-name{
+margin-top:20px;
+font-size:30px;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+.loading-text{
+margin-top:12px;
+color:#c9d2df;
+}
+
+/*==============================
+      Main Dashboard
+===============================*/
+
+#dashboard{
+display:none;
+padding:20px;
+animation:fadeIn 1s;
+}
+
+/* Header */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+flex-wrap:wrap;
+gap:10px;
+}
+
+header h1{
+font-size:28px;
+}
+
+.profile{
+background:var(--card);
+padding:10px 18px;
+border-radius:12px;
+}
+
+/* Balance Cards */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:var(--card);
+padding:25px;
+border-radius:18px;
+transition:.3s;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h3{
+color:var(--gray);
+font-size:15px;
+margin-bottom:10px;
+}
+
+.card h2{
+font-size:28px;
+color:var(--accent);
+}
+
+/* Grid Layout */
+
+.main-grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:25px;
+}
+
+/* Transactions */
+
+.transactions{
+background:var(--card);
+padding:20px;
+border-radius:18px;
+overflow-x:auto;
+}
+
+.transactions h2{
+margin-bottom:18px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:500px;
+}
+
+th{
+background:#24324d;
+padding:14px;
+text-align:left;
+}
+
+td{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.credit{
+color:#00d084;
+font-weight:bold;
+}
+
+.debit{
+color:#ff5f5f;
+font-weight:bold;
+}
+
+/* Withdrawal Form */
+
+.withdraw{
+background:var(--card);
+padding:20px;
+border-radius:18px;
+}
+
+.withdraw h2{
+margin-bottom:20px;
+}
+
+.withdraw input,
+.withdraw select{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+background:var(--card2);
+border:none;
+border-radius:10px;
+color:white;
+font-size:15px;
+outline:none;
+}
+
+.withdraw button{
+width:100%;
+padding:15px;
+background:var(--accent);
+border:none;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+.withdraw button:hover{
+background:#00ba75;
+transform:scale(1.02);
+}
+/*==============================
+      Processing Screen
+===============================*/
+
+#processing{
+display:none;
+height:100vh;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+background:linear-gradient(135deg,#08111f,#13233e);
+animation:fadeIn 1s;
+padding:20px;
+text-align:center;
+}
+
+#processing h1{
+margin-bottom:20px;
+font-size:34px;
+}
+
+#processing p{
+margin:10px 0;
+color:var(--gray);
+font-size:18px;
+}
+
+.progress-container{
+width:90%;
+max-width:500px;
+height:22px;
+background:#24324d;
+border-radius:30px;
+overflow:hidden;
+margin:30px 0;
+}
+
+.progress-bar{
+width:30%;
+height:100%;
+background:linear-gradient(90deg,var(--accent),var(--blue));
+border-radius:30px;
+animation:glow 2s infinite;
+}
+
+.countdown{
+font-size:22px;
+font-weight:bold;
+color:var(--accent);
+}
+
+/*==============================
+        Animations
+===============================*/
+
+@keyframes fadeIn{
+from{
+opacity:0;
+}
+to{
+opacity:1;
+}
+}
+
+@keyframes pulse{
+0%{
+transform:scale(1);
+}
+50%{
+transform:scale(1.08);
+}
+100%{
+transform:scale(1);
+}
+}
+
+@keyframes glow{
+0%{
+opacity:.8;
+}
+50%{
+opacity:1;
+}
+100%{
+opacity:.8;
+}
+}
+
+/*==============================
+      Responsive Design
+===============================*/
+
+@media(max-width:900px){
+
+.main-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+header h1{
+font-size:24px;
+}
+
+.card h2{
+font-size:22px;
+}
+
+.withdraw,
+.transactions{
+padding:15px;
+}
+
+}
+
+</style>
 </head>
+
 <body>
 
-    <div id="loader"><div class="spinner"></div><p>CND System Initializing...</p></div>
+<!-- Splash Screen -->
 
-    <div id="login" class="container">
-        <h2 id="CND1">CND Secure Portal</h2>
-        <input type="text" id="user" placeholder="Enter Username">
-        <button onclick="login()">Login</button>
-    </div>
+<div id="splash">
 
-    <div id="dashboard" class="container">
-        <h2>Account Overview</h2>
-        <p>User: <strong>Ray A. Frasure</strong></p>
-        <p>Available Balance: <strong style="color:var(--accent); font-size: 1.5rem;">$125,430.00</strong></p>
-        <input type="number" id="amt" placeholder="Withdrawal Amount">
-        <button onclick="process()">Confirm Withdrawal</button>
+<div class="logo">
+EB
+</div>
 
-        <h3>Recent Transactions</h3>
-        <table>
-            <tr><th>Date</th><th>Type</th><th>Amount</th></tr>
-            <tr><td>2026-06-15</td><td>Deposit</td><td>+$5,000.00</td></tr>
-            <tr><td>2026-06-10</td><td>Transfer</td><td>-$1,200.00</td></tr>
-        </table>
-    </div>
+<div class="bank-name">
+EliteBank
+</div>
 
-    <div id="processing" class="container">
-        <h3>Withdrawal Processing</h3>
-        <div style="background:#0f0f1a; height:20px; border-radius:10px; border: 1px solid var(--accent);">
-            <div id="bar" style="width:30%; height:100%; background:var(--accent);"></div>
-        </div>
-        <p>Status: 30% Complete</p>
-        <p>Time remaining: <br><strong>5 months, 12 days, 13 hours</strong></p>
-    </div>
+<div class="loading-text">
+Loading your secure dashboard...
+</div>
 
-    <script>
-        setTimeout(() => document.getElementById('loader').style.display = 'none', 10000);
+</div>
 
-        function login() {
-            if(document.getElementById('user').value === "Ray A. Frasure") {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            } else { alert("Invalid Credentials"); }
-        }
+<!-- Main Dashboard -->
 
-        function process() {
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('processing').style.display = 'block';
-        }
-    </script>
+<div id="dashboard">
+
+<header>
+
+<h1>Banking Dashboard</h1>
+
+<div class="profile">
+Welcome, John Doe
+</div>
+
+</header>
+
+<div class="cards">
+
+<div class="card">
+<h3>Account Balance</h3>
+<h2>$58,460.75</h2>
+</div>
+
+<div class="card">
+<h3>Total Deposits</h3>
+<h2>$120,500.00</h2>
+</div>
+
+<div class="card">
+<h3>Total Withdrawals</h3>
+<h2>$62,039.25</h2>
+</div>
+
+</div>
+
+<div class="main-grid">
+
+<div class="transactions">
+
+<h2>Recent Transactions</h2>
+
+<table>
+
+<tr>
+<th>Date</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>12 Jun</td>
+<td>Salary Deposit</td>
+<td class="credit">+$4,500</td>
+<td>Completed</td>
+</tr>
+
+<tr>
+<td>09 Jun</td>
+<td>ATM Withdrawal</td>
+<td class="debit">-$300</td>
+<td>Completed</td>
+</tr>
+
+<tr>
+<td>05 Jun</td>
+<td>Amazon Purchase</td>
+<td class="debit">-$210</td>
+<td>Completed</td>
+</tr>
+
+<tr>
+<td>01 Jun</td>
+<td>Wire Transfer</td>
+<td class="credit">+$8,200</td>
+<td>Completed</td>
+</tr>
+
+<tr>
+<td>29 May</td>
+<td>Netflix</td>
+<td class="debit">-$15</td>
+<td>Completed</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="withdraw">
+
+<h2>Withdraw Funds</h2>
+
+<input type="text" placeholder="Recipient Name">
+
+<input type="number" placeholder="Amount">
+
+<select>
+
+<option>Bank Transfer</option>
+
+<option>Crypto Wallet</option>
+
+<option>PayPal</option>
+
+</select>
+
+<button id="withdrawBtn">
+Withdraw Now
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Processing Screen -->
+
+<div id="processing">
+
+<h1>Processing Withdrawal...</h1>
+
+<div class="progress-container">
+<div class="progress-bar"></div>
+</div>
+
+<p>Progress: <strong>30%</strong></p>
+
+<p>Estimated Completion</p>
+
+<div class="countdown">
+
+5 Months, 12 Days, 13 Hours
+
+</div>
+
+</div>
+
+<script>
+/*=========================================
+      ELITEBANK DASHBOARD JAVASCRIPT
+==========================================*/
+
+// Get page elements
+const splash = document.getElementById("splash");
+const dashboard = document.getElementById("dashboard");
+const processing = document.getElementById("processing");
+const withdrawBtn = document.getElementById("withdrawBtn");
+
+// Show dashboard after EXACTLY 10 seconds
+setTimeout(function () {
+
+    splash.style.opacity = "0";
+
+    setTimeout(function () {
+
+        splash.style.display = "none";
+        dashboard.style.display = "block";
+
+    }, 1000);
+
+}, 10000);
+
+// Withdrawal button
+withdrawBtn.addEventListener("click", function () {
+
+    dashboard.style.display = "none";
+
+    processing.style.display = "flex";
+
+});
+
+</script>
+
 </body>
 </html>
-
-
 
 
 
