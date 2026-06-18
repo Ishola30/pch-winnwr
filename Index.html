@@ -1,3 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CND | Secure Banking</title>
+    <style>
+        :root { --primary: #1a1a2e; --secondary: #16213e; --accent: #4ecca3; --text: #eeeeee; }
+        body { font-family: 'Inter', sans-serif; background: #0f0f1a; color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        #loader { position: fixed; inset: 0; background: var(--primary); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; animation: fadeOut 0.5s 9.5s forwards; }
+        .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+
+        .container { width: 90%; max-width: 600px; background: var(--secondary); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: var(--accent); text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #333; background: #0f0f1a; color: white; border-radius: 8px; box-sizing: border-box; }
+        button { background: var(--accent); color: var(--primary); border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { opacity: 0.9; }
+
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
+        
+        #dashboard, #processing { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><div class="spinner"></div><p>CND System Initializing...</p></div>
+
+    <div id="login" class="container">
+        <h2 id="CND1">CND Secure Portal</h2>
+        <input type="text" id="user" placeholder="Enter Username">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="dashboard" class="container">
+        <h2>Account Overview</h2>
+        <p>User: <strong>Ray A. Frasure</strong></p>
+        <p>Available Balance: <strong style="color:var(--accent); font-size: 1.5rem;">$125,430.00</strong></p>
+        <input type="number" id="amt" placeholder="Withdrawal Amount">
+        <button onclick="process()">Confirm Withdrawal</button>
+
+        <h3>Recent Transactions</h3>
+        <table>
+            <tr><th>Date</th><th>Type</th><th>Amount</th></tr>
+            <tr><td>2026-06-15</td><td>Deposit</td><td>+$5,000.00</td></tr>
+            <tr><td>2026-06-10</td><td>Transfer</td><td>-$1,200.00</td></tr>
+        </table>
+    </div>
+
+    <div id="processing" class="container">
+        <h3>Withdrawal Processing</h3>
+        <div style="background:#0f0f1a; height:20px; border-radius:10px; border: 1px solid var(--accent);">
+            <div id="bar" style="width:30%; height:100%; background:var(--accent);"></div>
+        </div>
+        <p>Status: 30% Complete</p>
+        <p>Time remaining: <br><strong>5 months, 12 days, 13 hours</strong></p>
+    </div>
+
+    <script>
+        setTimeout(() => document.getElementById('loader').style.display = 'none', 10000);
+
+        function login() {
+            if(document.getElementById('user').value === "Ray A. Frasure") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } else { alert("Invalid Credentials"); }
+        }
+
+        function process() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('processing').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
 
 
 
